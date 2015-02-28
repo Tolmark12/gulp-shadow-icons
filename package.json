@@ -2,7 +2,7 @@
   "name": "gulp-shadow",
   "description": "SVG Library",
   "version": "0.0.1",
-  "repository": "git://github.com/wearefractal/gulp-coffee.git",
+  "repository": "git://github.com/Tolmark12/gulp-shadow-icons.git",
   "author": "Mark Parson",
   "main": "./index.js",
   "keywords": [
