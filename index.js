@@ -48,6 +48,8 @@
     data = data.replace(/<!-- Gen.+/g, '');
     data = data.replace(/<!DOC.+/g, '');
     data = data.replace(/<style[\s\S]*<\/style>/g, '');
+    data = data.replace(/<text(.+?<tspan.+?class="(.+?)")/g, '<text class="$2" $1');
+    data = data.replace(/<tspan.+?>(.+?)<\/tspan>/g, '$1');
     data = data.replace(/_x5F_/g, '_');
     data = data.replace(/id="(.+)?_x[23]E_(.+?)"/g, 'id="$1" class="$2" ');
     data = data.replace(/_x2C_/g, ' ');
@@ -62,6 +64,7 @@
   getCssFile = function(file, fileName, cssPath, namespace) {
     var data;
     data = file.contents.toString();
+    data = data.replace(/(font-size:[0-9\.]+);/g, '$1px;');
     data = data.replace(/[\s\S]*<\!\[CDATA\[([\s\S]*)\]\]>[\s\S]*/g, '$1');
     data = data.replace(/enable-background:new\s+;/g, '');
     data = data.replace(/\s+(\.[a-z0-9]+?{.+)/g, "" + namespace + " $1\n");
