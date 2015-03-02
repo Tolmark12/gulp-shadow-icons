@@ -46,7 +46,6 @@
     data = file.contents.toString();
     data = data.replace(/<\?xml.+/g, '');
     data = data.replace(/<!-- Gen.+/g, '');
-    data = data.replace(/<tspan.+?>(.+?)<\/tspan>/g, '$1');
     data = data.replace(/<!DOC.+/g, '');
     data = data.replace(/<style[\s\S]*<\/style>/g, '');
     data = data.replace(/_x5F_/g, '_');
