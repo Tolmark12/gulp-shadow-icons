@@ -43,19 +43,21 @@ makeFile = (data, file, subDir, fileName)->
 
 getJavascriptFile = (file, fileName, jsPath) ->
   data = file.contents.toString()
-  data = data.replace /<\?xml.+/g, ''                                             # Strip out the xml header
-  data = data.replace /<!-- Gen.+/g, ''                                           # Strip out the Adobe Generator comment
-  data = data.replace /<!DOC.+/g, ''                                              # Strip out the DOCTYPE
-  data = data.replace /<style[\s\S]*<\/style>/g, ''                               # Strip out the generated css
-  data = data.replace /<text(.+?<tspan.+?class="(.+?)")/g, '<text class="$2" $1'  # illustrator does this weird thing with tspans.. grab the class and attach it to the text element
-  data = data.replace /<tspan.+?>(.+?)<\/tspan>/g, '$1'                           # Get rid of the tspans
-  data = data.replace /_x5F_/g, '_'                                               # Replace _x5F_'s with _'s (illustrator's character for underscore)
-  data = data.replace /id="(.+)?_x[23]E_(.+?)"/g, 'id="$1" class="$2" '           # id / class id>class1,class2,class3
-  data = data.replace /_x2C_/g, ' '                                               # Replace all commas between class with spaces
-  data = data.replace /class="([a-z0-9\-\s]+).*?"/g, 'class="$1"'                 # Strip out superfluous underscores illustrator adds to duplicate layer names
-  data = data.replace /\/>\s+/g, '/>'                                             # remove superfluous spaces
-  data = data.replace /\n|\r/g, ''                                                # Strip out all returns
-  data = data.replace /<svg.+?>([\s\S]*)<\/svg>/g, '$1'                           # Strip out svg tags
+  data = data.replace /<\?xml.+/g, ''                                                                               # Strip out the xml header
+  data = data.replace /<!-- Gen.+/g, ''                                                                             # Strip out the Adobe Generator comment
+  data = data.replace /<!DOC.+/g, ''                                                                                # Strip out the DOCTYPE
+  data = data.replace /<style[\s\S]*<\/style>/g, ''                                                                 # Strip out the generated css
+  data = data.replace /<text(.+?(class="(.+?)"|<tspan)+?(.+?<tspan.+?class="(.+?)"))/g, '<text class="$3 $5" $1' ;  # illustrator does this weird thing with tspans.. grab the class and attach it to the text element
+  data = data.replace /<tspan.+?>(.+?)<\/tspan>/g, '$1'                                                             # Get rid of the tspans
+  data = data.replace /_x5F_/g, '_'                                                                                 # Replace _x5F_'s with _'s (illustrator's character for underscore)
+  data = data.replace /id="(.+)?_x[23]E_(.+?)"/g, 'id="$1" class="$2" '                                             # id / class id>class1,class2,class3
+  data = data.replace /class="([a-z0-9 ]+)" class="([a-z0-9]*)"/g, 'class="$1 $2"'                                  # After doing the previous line, we sometimes have two classes on the same element, combine them
+  data = data.replace /id=""/g, ''                                                                                  # Delete empty ids
+  data = data.replace /_x2C_/g, ' '                                                                                 # Replace all commas between class with spaces
+  data = data.replace /class="([a-z0-9\-\s]+).*?"/g, 'class="$1"'                                                   # Strip out superfluous underscores illustrator adds to duplicate layer names
+  data = data.replace /\/>\s+/g, '/>'                                                                               # remove superfluous spaces
+  data = data.replace /\n|\r/g, ''                                                                                  # Strip out all returns
+  data = data.replace /<svg.+?>([\s\S]*)<\/svg>/g, '$1'                                                             # Strip out svg tags
   data = data.replace /(<symbol[\s\S]*symbol>)([\s\S]*)/g, "var pxSymbolString = pxSymbolString || ''; pxSymbolString+='$1';\nvar pxSvgIconString = pxSvgIconString || ''; pxSvgIconString+='$2';" # Save the symbols and svgs
   return makeFile data, file, jsPath, fileName + '.js'
 

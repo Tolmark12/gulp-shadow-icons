@@ -48,10 +48,12 @@
     data = data.replace(/<!-- Gen.+/g, '');
     data = data.replace(/<!DOC.+/g, '');
     data = data.replace(/<style[\s\S]*<\/style>/g, '');
-    data = data.replace(/<text(.+?<tspan.+?class="(.+?)")/g, '<text class="$2" $1');
+    data = data.replace(/<text(.+?(class="(.+?)"|<tspan)+?(.+?<tspan.+?class="(.+?)"))/g, '<text class="$3 $5" $1');
     data = data.replace(/<tspan.+?>(.+?)<\/tspan>/g, '$1');
     data = data.replace(/_x5F_/g, '_');
     data = data.replace(/id="(.+)?_x[23]E_(.+?)"/g, 'id="$1" class="$2" ');
+    data = data.replace(/class="([a-z0-9 ]+)" class="([a-z0-9]*)"/g, 'class="$1 $2"');
+    data = data.replace(/id=""/g, '');
     data = data.replace(/_x2C_/g, ' ');
     data = data.replace(/class="([a-z0-9\-\s]+).*?"/g, 'class="$1"');
     data = data.replace(/\/>\s+/g, '/>');
