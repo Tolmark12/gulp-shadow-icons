@@ -15,9 +15,11 @@ gulpShadowPlugin = (options={})->
       options.cssDest       ||= ""
       options.jsDest        ||= ""
       options.cssNamespace  ||= ""
+      options.cssRegex      ||= []
+      options.jsRegex       ||= []
 
-      @push getJavascriptFile file, fileName, options.jsDest
-      @push getCssFile file, fileName, options.cssDest, options.cssNamespace
+      @push getJavascriptFile file, fileName, options.jsDest, options.jsRegex
+      @push getCssFile file, fileName, options.cssDest, options.cssNamespace, options.cssRegex
 
     cb()
   return stream
@@ -41,7 +43,7 @@ makeFile = (data, file, subDir, fileName)->
  #     # #     #   # #   #     # #     # #     # #    #   #  #          #
   #####  #     #    #    #     #  #####   #####  #     # ### #          #
 
-getJavascriptFile = (file, fileName, jsPath) ->
+getJavascriptFile = (file, fileName, jsPath, regexAr) ->
   data = file.contents.toString()
   data = data.replace /<\?xml.+/g, ''                                                                               # Strip out the xml header
   data = data.replace /<!-- Gen.+/g, ''                                                                             # Strip out the Adobe Generator comment
@@ -59,6 +61,10 @@ getJavascriptFile = (file, fileName, jsPath) ->
   data = data.replace /\n|\r/g, ''                                                                                  # Strip out all returns
   data = data.replace /<svg.+?>([\s\S]*)<\/svg>/g, '$1'                                                             # Strip out svg tags
   data = data.replace /(<symbol[\s\S]*symbol>)([\s\S]*)/g, "var pxSymbolString = pxSymbolString || ''; pxSymbolString+='$1';\nvar pxSvgIconString = pxSvgIconString || ''; pxSvgIconString+='$2';" # Save the symbols and svgs
+
+  for regex in regexAr
+    data = data.replace regex.pattern, regex.replace
+
   return makeFile data, file, jsPath, fileName + '.js'
 
 
@@ -75,6 +81,10 @@ getCssFile = (file, fileName, cssPath, namespace) ->
   data = data.replace /[\s\S]*<\!\[CDATA\[([\s\S]*)\]\]>[\s\S]*/g, '$1'   # Strip out everything but the css (reminder [\s\S]* is js multiline equivalent to .* )
   data = data.replace /enable-background:new\s+;/g, ''                    # Remove the enable-background:new data illustrator uses
   data = data.replace /\s+(\.[a-z0-9]+?{.+)/g, "#{namespace} $1\n"        #prefix the tags with the namespace and add a hard return
+  
+  for regex in regexAr
+    data = data.replace regex.pattern, regex.replace
+
   return makeFile data, file, cssPath, fileName + '.css'
 
 
