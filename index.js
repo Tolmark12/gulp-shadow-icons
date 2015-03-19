@@ -24,8 +24,10 @@
         options.cssDest || (options.cssDest = "");
         options.jsDest || (options.jsDest = "");
         options.cssNamespace || (options.cssNamespace = "");
-        this.push(getJavascriptFile(file, fileName, options.jsDest));
-        this.push(getCssFile(file, fileName, options.cssDest, options.cssNamespace));
+        options.cssRegex || (options.cssRegex = []);
+        options.jsRegex || (options.jsRegex = []);
+        this.push(getJavascriptFile(file, fileName, options.jsDest, options.jsRegex));
+        this.push(getCssFile(file, fileName, options.cssDest, options.cssRegex, options.cssNamespace));
       }
       return cb();
     });
@@ -41,8 +43,8 @@
     });
   };
 
-  getJavascriptFile = function(file, fileName, jsPath) {
-    var data;
+  getJavascriptFile = function(file, fileName, jsPath, regexAr) {
+    var data, regex, _i, _len;
     data = file.contents.toString();
     data = data.replace(/<\?xml.+/g, '');
     data = data.replace(/<!-- Gen.+/g, '');
@@ -60,16 +62,24 @@
     data = data.replace(/\n|\r/g, '');
     data = data.replace(/<svg.+?>([\s\S]*)<\/svg>/g, '$1');
     data = data.replace(/(<symbol[\s\S]*symbol>)([\s\S]*)/g, "var pxSymbolString = pxSymbolString || ''; pxSymbolString+='$1';\nvar pxSvgIconString = pxSvgIconString || ''; pxSvgIconString+='$2';");
+    for (_i = 0, _len = regexAr.length; _i < _len; _i++) {
+      regex = regexAr[_i];
+      data = data.replace(regex.pattern, regex.replace);
+    }
     return makeFile(data, file, jsPath, fileName + '.js');
   };
 
-  getCssFile = function(file, fileName, cssPath, namespace) {
-    var data;
+  getCssFile = function(file, fileName, cssPath, regexAr, namespace) {
+    var data, regex, _i, _len;
     data = file.contents.toString();
     data = data.replace(/(font-size:[0-9\.]+);/g, '$1px;');
     data = data.replace(/[\s\S]*<\!\[CDATA\[([\s\S]*)\]\]>[\s\S]*/g, '$1');
     data = data.replace(/enable-background:new\s+;/g, '');
     data = data.replace(/\s+(\.[a-z0-9]+?{.+)/g, "" + namespace + " $1\n");
+    for (_i = 0, _len = regexAr.length; _i < _len; _i++) {
+      regex = regexAr[_i];
+      data = data.replace(regex.pattern, regex.replace);
+    }
     return makeFile(data, file, cssPath, fileName + '.css');
   };
 

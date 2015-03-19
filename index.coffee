@@ -19,7 +19,7 @@ gulpShadowPlugin = (options={})->
       options.jsRegex       ||= []
 
       @push getJavascriptFile file, fileName, options.jsDest, options.jsRegex
-      @push getCssFile file, fileName, options.cssDest, options.cssNamespace, options.cssRegex
+      @push getCssFile file, fileName, options.cssDest, options.cssRegex, options.cssNamespace
 
     cb()
   return stream
@@ -75,13 +75,13 @@ getJavascriptFile = (file, fileName, jsPath, regexAr) ->
  #    # #    # #    #
   ####   ####   ####
 
-getCssFile = (file, fileName, cssPath, namespace) ->
+getCssFile = (file, fileName, cssPath, regexAr, namespace) ->
   data = file.contents.toString()
   data = data.replace /(font-size:[0-9\.]+);/g, '$1px;'                   # Add px to the css font sizes
   data = data.replace /[\s\S]*<\!\[CDATA\[([\s\S]*)\]\]>[\s\S]*/g, '$1'   # Strip out everything but the css (reminder [\s\S]* is js multiline equivalent to .* )
   data = data.replace /enable-background:new\s+;/g, ''                    # Remove the enable-background:new data illustrator uses
   data = data.replace /\s+(\.[a-z0-9]+?{.+)/g, "#{namespace} $1\n"        #prefix the tags with the namespace and add a hard return
-  
+
   for regex in regexAr
     data = data.replace regex.pattern, regex.replace
 
