@@ -57,7 +57,7 @@
     data = data.replace(/class="([a-z0-9\-_]+)"\s+class="([a-z0-9\-_]+)"/g, 'class="$1 $2"');
     data = data.replace(/id=""/g, '');
     data = data.replace(/_x2C_/g, ' ');
-    data = data.replace(/class="([a-z0-9\-]+).+?\s(.+?)"/g, 'class="$1 $2"');
+    data = data.replace(/class="([a-z0-9\-]+)[^"]+?\s(.+?)"/g, 'class="$1 $2"');
     data = data.replace(/\/>\s+/g, '/>');
     data = data.replace(/\n|\r/g, '');
     data = data.replace(/<svg.+?>([\s\S]*)<\/svg>/g, '$1');
