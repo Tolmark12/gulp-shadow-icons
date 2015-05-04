@@ -54,7 +54,7 @@
     data = data.replace(/<tspan.+?>(.+?)<\/tspan>/g, '$1');
     data = data.replace(/_x5F_/g, '_');
     data = data.replace(/id="(.+)?_x[23]E_(.+?)"/g, 'id="$1" class="$2" ');
-    data = data.replace(/class="([a-z0-9-_]+)"\s+class="([a-z0-9-_]+)"/g, 'class="$1 $2"');
+    data = data.replace(/class="([a-z0-9\-_]+)"\s+class="([a-z0-9\-_]+)"/g, 'class="$1 $2"');
     data = data.replace(/id=""/g, '');
     data = data.replace(/_x2C_/g, ' ');
     data = data.replace(/class="([a-z0-9\-\s]+).*?"/g, 'class="$1"');

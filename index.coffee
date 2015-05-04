@@ -53,7 +53,7 @@ getJavascriptFile = (file, fileName, jsPath, regexAr) ->
   data = data.replace /<tspan.+?>(.+?)<\/tspan>/g, '$1'                                                             # Get rid of the tspans
   data = data.replace /_x5F_/g, '_'                                                                                 # Replace _x5F_'s with _'s (illustrator's character for underscore)
   data = data.replace /id="(.+)?_x[23]E_(.+?)"/g, 'id="$1" class="$2" '                                             # id / class id>class1,class2,class3
-  data = data.replace(/class="([a-z0-9-_]+)"\s+class="([a-z0-9-_]+)"/g, 'class="$1 $2"');
+  data = data.replace(/class="([a-z0-9\-_]+)"\s+class="([a-z0-9\-_]+)"/g, 'class="$1 $2"');
   data = data.replace /id=""/g, ''                                                                                  # Delete empty ids
   data = data.replace /_x2C_/g, ' '                                                                                 # Replace all commas between class with spaces
   data = data.replace /class="([a-z0-9\-\s]+).*?"/g, 'class="$1"'                                                   # Strip out superfluous underscores illustrator adds to duplicate layer names
