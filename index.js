@@ -54,14 +54,6 @@
     data = data.replace(/<tspan.+?>(.+?)<\/tspan>/g, '$1');
     data = data.replace(/_x5F_/g, '_');
     data = data.replace(/id="(.+)?_x[23]E_(.+?)"/g, 'id="$1" class="$2" ');
-    data = data.replace(/class="([a-z0-9\-_]+)"\s+class="([a-z0-9\-_]+)"/g, 'class="$1 $2"');
-    data = data.replace(/id=""/g, '');
-    data = data.replace(/_x2C_/g, ' ');
-    data = data.replace(/class="([a-z0-9\-\s]+).*?"/g, 'class="$1"');
-    data = data.replace(/\/>\s+/g, '/>');
-    data = data.replace(/\n|\r/g, '');
-    data = data.replace(/<svg.+?>([\s\S]*)<\/svg>/g, '$1');
-    data = data.replace(/(<symbol[\s\S]*symbol>)([\s\S]*)/g, "var pxSymbolString = pxSymbolString || ''; pxSymbolString+='$1';\nvar pxSvgIconString = pxSvgIconString || ''; pxSvgIconString+='$2';");
     for (_i = 0, _len = regexAr.length; _i < _len; _i++) {
       regex = regexAr[_i];
       data = data.replace(regex.pattern, regex.replace);
