@@ -53,14 +53,14 @@ getJavascriptFile = (file, fileName, jsPath, regexAr) ->
   data = data.replace /<tspan.+?>(.+?)<\/tspan>/g, '$1'                                                             # Get rid of the tspans
   data = data.replace /_x5F_/g, '_'                                                                                 # Replace _x5F_'s with _'s (illustrator's character for underscore)
   data = data.replace /id="(.+)?_x[23]E_(.+?)"/g, 'id="$1" class="$2" '                                             # id / class id>class1,class2,class3
-  # data = data.replace(/class="([a-z0-9\-_]+)"\s+class="([a-z0-9\-_]+)"/g, 'class="$1 $2"');
-  # data = data.replace /id=""/g, ''                                                                                  # Delete empty ids
-  # data = data.replace /_x2C_/g, ' '                                                                                 # Replace all commas between class with spaces
-  # data = data.replace /class="([a-z0-9\-\s]+).*?"/g, 'class="$1"'                                                   # Strip out superfluous underscores illustrator adds to duplicate layer names
-  # data = data.replace /\/>\s+/g, '/>'                                                                               # remove superfluous spaces
-  # data = data.replace /\n|\r/g, ''                                                                                  # Strip out all returns
-  # data = data.replace /<svg.+?>([\s\S]*)<\/svg>/g, '$1'                                                             # Strip out svg tags
-  # data = data.replace /(<symbol[\s\S]*symbol>)([\s\S]*)/g, "var pxSymbolString = pxSymbolString || ''; pxSymbolString+='$1';\nvar pxSvgIconString = pxSvgIconString || ''; pxSvgIconString+='$2';" # Save the symbols and svgs
+  data = data.replace(/class="([a-z0-9\-_]+)"\s+class="([a-z0-9\-_]+)"/g, 'class="$1 $2"');
+  data = data.replace /id=""/g, ''                                                                                  # Delete empty ids
+  data = data.replace /_x2C_/g, ' '                                                                                 # Replace all commas between class with spaces
+  data = data.replace /class="([a-z0-9\-]+).+?\s(.+?)"/g, 'class="$1 $2"'                                           # Strip out superfluous underscores illustrator adds to duplicate layer names, but keep the illustrator generated class
+  data = data.replace /\/>\s+/g, '/>'                                                                               # remove superfluous spaces
+  data = data.replace /\n|\r/g, ''                                                                                  # Strip out all returns
+  data = data.replace /<svg.+?>([\s\S]*)<\/svg>/g, '$1'                                                             # Strip out svg tags
+  data = data.replace /(<symbol[\s\S]*symbol>)([\s\S]*)/g, "var pxSymbolString = pxSymbolString || ''; pxSymbolString+='$1';\nvar pxSvgIconString = pxSvgIconString || ''; pxSvgIconString+='$2';" # Save the symbols and svgs
 
   for regex in regexAr
     data = data.replace regex.pattern, regex.replace
