@@ -14,7 +14,7 @@
       options = {};
     }
     stream = through.obj(function(file, enc, cb) {
-      var fileName;
+      var fileName, namespace;
       if (file.isStream()) {
         this.emit('error', new gutil.PluginError(PLUGIN_NAME, "Streams aren't supported"));
         return cb();
@@ -26,8 +26,12 @@
         options.cssNamespace || (options.cssNamespace = "");
         options.cssRegex || (options.cssRegex = []);
         options.jsRegex || (options.jsRegex = []);
-        this.push(getJavascriptFile(file, fileName, options.jsDest, options.jsRegex));
-        this.push(getCssFile(file, fileName, options.cssDest, options.cssRegex, options.cssNamespace));
+        if (options.unique_namespace) {
+          namespace = fileName;
+        } else {
+          namespace = "";
+        }
+        this.push(getJavascriptFile(file, fileName, options.jsDest, options.jsRegex, this.push(getCssFile(file, fileName, options.cssDest, options.cssRegex, namespace))));
       }
       return cb();
     });
