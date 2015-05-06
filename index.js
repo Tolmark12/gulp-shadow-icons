@@ -26,8 +26,8 @@
         options.cssNamespace || (options.cssNamespace = "");
         options.cssRegex || (options.cssRegex = []);
         options.jsRegex || (options.jsRegex = []);
-        if (options.unique_namespace) {
-          namespace = fileName;
+        if (options.uniqueCssParentClass) {
+          namespace = "." + fileName + " ";
         } else {
           namespace = "";
         }
@@ -79,7 +79,7 @@
     data = data.replace(/(font-size:[0-9\.]+);/g, '$1px;');
     data = data.replace(/[\s\S]*<\!\[CDATA\[([\s\S]*)\]\]>[\s\S]*/g, '$1');
     data = data.replace(/enable-background:new\s+;/g, '');
-    data = data.replace(/\s+(\.[a-z0-9]+?{.+)/g, "" + namespace + " $1\n");
+    data = data.replace(/\s+(\.[a-z0-9]+?{.+)/g, "" + namespace + "$1\n");
     for (_i = 0, _len = regexAr.length; _i < _len; _i++) {
       regex = regexAr[_i];
       data = data.replace(regex.pattern, regex.replace);
