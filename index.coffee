@@ -61,7 +61,7 @@ getJavascriptFile = (file, fileName, jsPath, regexAr) ->
   data = data.replace(/class="([a-z0-9\-_]+)"\s+class="([a-z0-9\-_]+)"/g, 'class="$1 $2"');
   data = data.replace /id=""/g, ''                                                                                  # Delete empty ids
   data = data.replace /_x2C_/g, ' '                                                                                 # Replace all commas between class with spaces
-  data = data.replace /class="([a-z0-9\-]+)[^"]+?\s(.+?)"/g, 'class="$1 $2"'                                        # Strip out superfluous underscores illustrator adds to duplicate layer names, but keep the illustrator generated class
+  data = data.replace /class="([a-z0-9\-]+)[^"\s]+?\s(.+?)"/g, 'class="$1 $2"'                                      # Strip out superfluous underscores illustrator adds to duplicate layer names, but keep the illustrator generated class
   data = data.replace /\/>\s+/g, '/>'                                                                               # remove superfluous spaces
   data = data.replace /\n|\r/g, ''                                                                                  # Strip out all returns
   data = data.replace /<svg.+?>([\s\S]*)<\/svg>/g, '$1'                                                             # Strip out svg tags
