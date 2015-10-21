@@ -1,7 +1,7 @@
 {
   "name": "gulp-shadow-library",
   "description": "SVG Library",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": "git://github.com/Tolmark12/gulp-shadow-icons.git",
   "author": "Mark Parson",
   "main": "./index.js",
