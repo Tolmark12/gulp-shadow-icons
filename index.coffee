@@ -18,7 +18,7 @@ gulpShadowPlugin = (options={})->
       options.cssRegex      ||= []
       options.jsRegex       ||= []
 
-      namespace = ".#{fileName}-svg "
+      namespace = "#{fileName}-svg "
 
       @push getJavascriptFile file, fileName, options.jsDest, options.jsRegex, namespace
       @push getCssFile file, fileName, options.cssDest, options.cssRegex, namespace
@@ -57,7 +57,7 @@ getJavascriptFile = (file, fileName, jsPath, regexAr, namespace) ->
   data = data.replace /id="(.+)?_x[23]E_(.+?)"/g, 'id="$1" class="$2" '                                             # id / class id>class1,class2,class3
   data = data.replace(/class="([a-z0-9\-_]+)"\s+class="([a-z0-9\-_]+)"/g, 'class="$1 $2"');
   data = data.replace /id=""/g, ''                                                                                  # Delete empty ids
-  data = data.replace /(<g id.+")/g, "$1 class='#{namespace}'"                                                                                  # Delete empty ids
+  data = data.replace /(<g id.+")/g, "$1 class=\"#{namespace}\""                                                                                  # Delete empty ids
   data = data.replace /_x2C_/g, ' '                                                                                 # Replace all commas between class with spaces
   data = data.replace /class="(.+)_[0-9]+_(.*)"/g, 'class="$1 $2"'                                                  # Strip out superfluous underscores illustrator adds to duplicate layer names, but keep the illustrator generated class
   data = data.replace /\/>\s+/g, '/>'                                                                               # remove superfluous spaces
@@ -83,7 +83,7 @@ getCssFile = (file, fileName, cssPath, regexAr, namespace) ->
   data = data.replace /(font-size:[0-9\.]+);/g, '$1px;'                   # Add px to the css font sizes
   data = data.replace /[\s\S]*<\!\[CDATA\[([\s\S]*)\]\]>[\s\S]*/g, '$1'   # Strip out everything but the css (reminder [\s\S]* is js multiline equivalent to .* )
   data = data.replace /enable-background:new\s+;/g, ''                    # Remove the enable-background:new data illustrator uses
-  data = data.replace /\s+(\.[a-z0-9]+?{.+)/g, "#{namespace}$1\n"         # prefix the tags with the namespace and add a hard return
+  data = data.replace /\s+(\.[a-z0-9]+?{.+)/g, ".#{namespace}$1\n"         # prefix the tags with the namespace and add a hard return
 
   for regex in regexAr
     data = data.replace regex.pattern, regex.replace

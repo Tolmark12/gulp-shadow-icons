@@ -26,7 +26,7 @@
         options.cssNamespace || (options.cssNamespace = "");
         options.cssRegex || (options.cssRegex = []);
         options.jsRegex || (options.jsRegex = []);
-        namespace = "." + fileName + "-svg ";
+        namespace = fileName + "-svg ";
         this.push(getJavascriptFile(file, fileName, options.jsDest, options.jsRegex, namespace));
         this.push(getCssFile(file, fileName, options.cssDest, options.cssRegex, namespace));
       }
@@ -57,7 +57,7 @@
     data = data.replace(/id="(.+)?_x[23]E_(.+?)"/g, 'id="$1" class="$2" ');
     data = data.replace(/class="([a-z0-9\-_]+)"\s+class="([a-z0-9\-_]+)"/g, 'class="$1 $2"');
     data = data.replace(/id=""/g, '');
-    data = data.replace(/(<g id.+")/g, "$1 class='" + namespace + "'");
+    data = data.replace(/(<g id.+")/g, "$1 class=\"" + namespace + "\"");
     data = data.replace(/_x2C_/g, ' ');
     data = data.replace(/class="(.+)_[0-9]+_(.*)"/g, 'class="$1 $2"');
     data = data.replace(/\/>\s+/g, '/>');
@@ -77,7 +77,7 @@
     data = data.replace(/(font-size:[0-9\.]+);/g, '$1px;');
     data = data.replace(/[\s\S]*<\!\[CDATA\[([\s\S]*)\]\]>[\s\S]*/g, '$1');
     data = data.replace(/enable-background:new\s+;/g, '');
-    data = data.replace(/\s+(\.[a-z0-9]+?{.+)/g, namespace + "$1\n");
+    data = data.replace(/\s+(\.[a-z0-9]+?{.+)/g, "." + namespace + "$1\n");
     for (i = 0, len = regexAr.length; i < len; i++) {
       regex = regexAr[i];
       data = data.replace(regex.pattern, regex.replace);
