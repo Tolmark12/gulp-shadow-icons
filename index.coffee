@@ -63,7 +63,8 @@ getJavascriptFile = (file, fileName, jsPath, regexAr, namespace) ->
   data = data.replace /\/>\s+/g, '/>'                                                                               # remove superfluous spaces
   data = data.replace /\n|\r/g, ''                                                                                  # Strip out all returns
   data = data.replace /<svg.+?>([\s\S]*)<\/svg>/g, '$1'                                                             # Strip out svg tags
-  data = data.replace /(<symbol[\s\S]*symbol>)([\s\S]*)/g, "var pxSymbolString = pxSymbolString || ''; pxSymbolString+='$1';\nvar pxSvgIconString = pxSvgIconString || ''; pxSvgIconString+='$2';" # Save the symbols and svgs
+  data = data.replace /([\s\S]*)/g, "var pxSvgIconString = pxSvgIconString || ''; pxSvgIconString+='$2';"           # Save just the svgs
+  # data = data.replace /(<symbol[\s\S]*symbol>)([\s\S]*)/g, "var pxSymbolString = pxSymbolString || ''; pxSymbolString+='$1';\nvar pxSvgIconString = pxSvgIconString || ''; pxSvgIconString+='$2';" # Save the symbols and svgs
 
   for regex in regexAr
     data = data.replace regex.pattern, regex.replace

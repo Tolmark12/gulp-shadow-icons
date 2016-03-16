@@ -63,7 +63,7 @@
     data = data.replace(/\/>\s+/g, '/>');
     data = data.replace(/\n|\r/g, '');
     data = data.replace(/<svg.+?>([\s\S]*)<\/svg>/g, '$1');
-    data = data.replace(/(<symbol[\s\S]*symbol>)([\s\S]*)/g, "var pxSymbolString = pxSymbolString || ''; pxSymbolString+='$1';\nvar pxSvgIconString = pxSvgIconString || ''; pxSvgIconString+='$2';");
+    data = data.replace(/([\s\S]*)/g, "var pxSvgIconString = pxSvgIconString || ''; pxSvgIconString+='$2';");
     for (i = 0, len = regexAr.length; i < len; i++) {
       regex = regexAr[i];
       data = data.replace(regex.pattern, regex.replace);
