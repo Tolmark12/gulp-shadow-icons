@@ -53,6 +53,7 @@
     data = data.replace(/<style[\s\S]*<\/style>/g, '');
     data = data.replace(/<text(.+?(class="(.+?)"|<tspan)+?(.+?<tspan.+?class="(.+?)"))/g, '<text class="$3 $5" $1');
     data = data.replace(/<tspan.+?>(.+?)<\/tspan>/g, '$1');
+    data = data.replace(/(<g id=".+)_x60_(.+?):(.+?)"/g, '$1" data-size="$2x$3"');
     data = data.replace(/_x5F_/g, '_');
     data = data.replace(/id="(.+)?_x[23]E_(.+?)"/g, 'id="$1" class="$2" ');
     data = data.replace(/class="([a-z0-9\-_]+)"\s+class="([a-z0-9\-_]+)"/g, 'class="$1 $2"');

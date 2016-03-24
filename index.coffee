@@ -53,9 +53,10 @@ getJavascriptFile = (file, fileName, jsPath, regexAr, namespace) ->
   data = data.replace /<style[\s\S]*<\/style>/g, ''                                                                 # Strip out the generated css
   data = data.replace /<text(.+?(class="(.+?)"|<tspan)+?(.+?<tspan.+?class="(.+?)"))/g, '<text class="$3 $5" $1' ;  # illustrator does this weird thing with tspans.. grab the class and attach it to the text element
   data = data.replace /<tspan.+?>(.+?)<\/tspan>/g, '$1'                                                             # Get rid of the tspans
+  data = data.replace /(<g id=".+)_x60_(.+?):(.+?)"/g, '$1" data-size="$2x$3"'                                      # When we generate the svg, we also record the width/height as : layername`10x10   replace that with  :  id="layername" data-size="10x10"
   data = data.replace /_x5F_/g, '_'                                                                                 # Replace _x5F_'s with _'s (illustrator's character for underscore)
   data = data.replace /id="(.+)?_x[23]E_(.+?)"/g, 'id="$1" class="$2" '                                             # id / class id>class1,class2,class3
-  data = data.replace(/class="([a-z0-9\-_]+)"\s+class="([a-z0-9\-_]+)"/g, 'class="$1 $2"');
+  data = data.replace /class="([a-z0-9\-_]+)"\s+class="([a-z0-9\-_]+)"/g, 'class="$1 $2"'                           # If there are multiple classes, concat them into one
   data = data.replace /id=""/g, ''                                                                                  # Delete empty ids
   data = data.replace /(<g id.+")/g, "$1 class=\"#{namespace}\""                                                                                  # Delete empty ids
   data = data.replace /_x2C_/g, ' '                                                                                 # Replace all commas between class with spaces
