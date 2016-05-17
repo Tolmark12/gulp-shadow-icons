@@ -79,6 +79,7 @@
     var data, i, len, regex;
     data = file.contents.toString();
     data = data.replace(/(\.st[0-9]+)/g, "$1_" + uniqueStr);
+    data = data.replace(/(SVGID_[0-9]+_)/g, "$1" + uniqueStr);
     data = data.replace(/(font-size:[0-9\.]+);/g, '$1px;');
     data = data.replace(/[\s\S]*<style type="text\/css">([\s\S]*)<\/style>[\s\S]*/g, '$1');
     data = data.replace(/enable-background:new\s+;/g, '');
