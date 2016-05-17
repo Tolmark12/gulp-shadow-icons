@@ -14,7 +14,7 @@
       options = {};
     }
     stream = through.obj(function(file, enc, cb) {
-      var fileName, namespace;
+      var fileName, namespace, uniqueStr;
       if (file.isStream()) {
         this.emit('error', new gutil.PluginError(PLUGIN_NAME, "Streams aren't supported"));
         return cb();
@@ -27,8 +27,9 @@
         options.cssRegex || (options.cssRegex = []);
         options.jsRegex || (options.jsRegex = []);
         namespace = fileName + "-svg ";
-        this.push(getJavascriptFile(file, fileName, options.jsDest, options.jsRegex, namespace));
-        this.push(getCssFile(file, fileName, options.cssDest, options.cssRegex, namespace));
+        uniqueStr = Date.now().toString(36);
+        this.push(getJavascriptFile(file, fileName, options.jsDest, options.jsRegex, namespace, uniqueStr));
+        this.push(getCssFile(file, fileName, options.cssDest, options.cssRegex, namespace, uniqueStr));
       }
       return cb();
     });
@@ -44,13 +45,15 @@
     });
   };
 
-  getJavascriptFile = function(file, fileName, jsPath, regexAr, namespace) {
+  getJavascriptFile = function(file, fileName, jsPath, regexAr, namespace, uniqueStr) {
     var data, i, len, regex;
     data = file.contents.toString();
     data = data.replace(/<\?xml.+/g, '');
     data = data.replace(/<!-- Gen.+/g, '');
     data = data.replace(/<!DOC.+/g, '');
     data = data.replace(/<style[\s\S]*<\/style>/g, '');
+    data = data.replace(/(class="st[0-9]+)/g, "$1_" + uniqueStr);
+    data = data.replace(/(SVGID_[0-9]+_)/g, "$1" + uniqueStr);
     data = data.replace(/<text(.+?(class="(.+?)"|<tspan)+?(.+?<tspan.+?class="(.+?)"))/g, '<text class="$3 $5" $1');
     data = data.replace(/<tspan.+?>(.+?)<\/tspan>/g, '$1');
     data = data.replace(/(<g id=".+)_x60_(.+?)x(.+?)"/g, '$1" data-size="$2x$3"');
@@ -72,9 +75,10 @@
     return makeFile(data, file, jsPath, fileName + '.js');
   };
 
-  getCssFile = function(file, fileName, cssPath, regexAr, namespace) {
+  getCssFile = function(file, fileName, cssPath, regexAr, namespace, uniqueStr) {
     var data, i, len, regex;
     data = file.contents.toString();
+    data = data.replace(/(\.st[0-9]+)/g, "$1_" + uniqueStr);
     data = data.replace(/(font-size:[0-9\.]+);/g, '$1px;');
     data = data.replace(/[\s\S]*<style type="text\/css">([\s\S]*)<\/style>[\s\S]*/g, '$1');
     data = data.replace(/enable-background:new\s+;/g, '');
